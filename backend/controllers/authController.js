@@ -42,14 +42,28 @@ const registerUser = asyncHandler(async (req, res) => {
       createdAt: new Date().toISOString(),
     })
 
-    const token = generateToken(newUser)
+    const token = accessToken(newUser)
+    const refresh = refreshToken(newUser)
 
-    res.status(201).json({
-      ...user._doc,
+    res.cookie('jwt', refresh, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    })
+
+    res.status(200).json({
+      user: {
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+        roles: newUser.roles,
+      },
       token,
     })
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    console.log(error)
+    res.status(400).json(error.message)
   }
 })
 
@@ -60,10 +74,8 @@ const loginUser = asyncHandler(async (req, res) => {
   try {
     const { username, password } = req.body
 
-    const { valid, errors } = validateLoginInput(username, password)
-
-    if (!valid) {
-      throw new Error(errors)
+    if (!username || !password) {
+      throw new Error('Invalid Credentials')
     }
 
     const user = await User.findOne({ username })
@@ -78,18 +90,74 @@ const loginUser = asyncHandler(async (req, res) => {
       throw new Error('Invalid Credentials')
     }
 
-    const token = generateToken(user)
+    const token = accessToken(user)
+    const refresh = refreshToken(user)
+
+    res.cookie('jwt', refresh, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    })
 
     res.status(200).json({
-      ...user._doc,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        roles: user.roles,
+      },
       token,
     })
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    res.status(400).json(error.message)
   }
 })
 
-function generateToken(user) {
+const refreshUser = asyncHandler(async (req, res) => {
+  try {
+    const token = req.cookies.jwt
+
+    if (!token) {
+      throw new Error('No token')
+    }
+
+    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+
+    const user = await User.findById(decoded.id)
+
+    if (!user) {
+      throw new Error('No user found')
+    }
+
+    const newToken = accessToken(user)
+
+    res.status(200).json({
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        roles: user.roles,
+      },
+      token: newToken,
+    })
+  } catch (error) {
+    res.status(400).json(error.message)
+  }
+})
+
+const logoutUser = asyncHandler(async (req, res) => {
+  const cookies = req.cookies
+  if (!cookies?.jwt) return res.status(204)
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  })
+  res.json({ message: 'Logged out' })
+})
+
+function accessToken(user) {
   return jwt.sign(
     {
       id: user.id,
@@ -98,12 +166,28 @@ function generateToken(user) {
       gender: user.gender,
       profile: user.profile,
     },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '10s' }
+  )
+}
+
+function refreshToken(user) {
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      gender: user.gender,
+      profile: user.profile,
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '1d' }
   )
 }
 
 module.exports = {
-  registerUser,
   loginUser,
+  logoutUser,
+  registerUser,
+  refreshUser,
 }

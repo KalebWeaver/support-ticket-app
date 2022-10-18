@@ -1,10 +1,13 @@
 const express = require('express')
 const path = require('path')
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 const dotenv = require('dotenv').config()
 const colors = require('colors')
 
 const connectDB = require('./utils/db')
+const corsOptions = require('./utils/corsConfig')
 
 const { errorHandler, notFound } = require('./middleware/errorMiddleware')
 
@@ -15,7 +18,9 @@ connectDB()
 const app = express()
 
 // Body parser
+app.use(cors(corsOptions))
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
 
 //Routes

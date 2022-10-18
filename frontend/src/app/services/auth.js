@@ -1,4 +1,4 @@
-import { api } from './services/api'
+import { api } from './api'
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,3 +18,5 @@ export const authApi = api.injectEndpoints({
     }),
   }),
 })
+
+export const { useLoginMutation, useRegisterMutation } = authApi
