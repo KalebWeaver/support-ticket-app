@@ -4,13 +4,11 @@ export const postsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTickets: builder.query({
       query: () => 'tickets',
-      providesTags: (result) => [
-        ...result.map(({ id }) => ({ type: 'Tickets', id })),
-      ],
+      providesTags: ['Tickets'],
     }),
     getTicket: builder.query({
       query: (id) => `tickets/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Tickets', id }],
+      providesTags: ['Tickets'],
     }),
     createTicket: builder.mutation({
       query: (body) => ({
@@ -29,7 +27,7 @@ export const postsApi = api.injectEndpoints({
           body: { status },
         }
       },
-      invalidatesTags: (ticket) => [{ type: 'Tickets', id: ticket?.id }],
+      invalidatesTags: ['Tickets'],
     }),
   }),
 })

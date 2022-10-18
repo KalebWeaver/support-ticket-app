@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 //Routes
-app.use('/api/users', require('./routes/userRoutes'))
+app.use('/api/auth', require('./routes/authRoutes'))
 app.use('/api/tickets', require('./routes/ticketRoutes'))
 
 //Serve Frontend

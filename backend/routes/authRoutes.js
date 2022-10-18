@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router({ mergeParams: true })
 
 //Controller Import
-const { loginUser, registerUser } = require('../controllers/userController')
+const { loginUser, registerUser } = require('../controllers/authController')
 
 //Middleware Import
 const { protect } = require('../middleware/authMiddleware')
