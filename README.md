@@ -5,9 +5,13 @@ I began with this project to tackle some new concepts. I had worked with Redux-T
 
 ## Features
 - Fully built express server that serves the static frontend build for ease of deployment and simplicity.
+- Protected API routes to protect backend from un-authorized requests from outside origin urls and un-authenticated users.
 - Full JWT authentication including Access Tokens and Refresh Tokens.
 - Redux Toolkit for handling state management.
 - RTK Query to handle Caching and automatic rehydration of data sent to and from backend server
+- Protected page routes to prevent un-authenticated users from viewing sensitive data. (This includes both users that are logged in and are not from viewing tickets)
+- Role based handling of data. (Admins can view all tickets from everyone, while users can only see their own). 
+- Basic messaging system to let users talk in depth about issues with admin.
 
 ## Packages 
 - React
