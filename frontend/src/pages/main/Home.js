@@ -17,8 +17,13 @@ import { ChevronRightIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import TicketModal from '../../components/tickets/TicketModal'
 
 const navigation = [
-  { name: 'Home', to: '/', icon: HomeIcon, current: true },
-  { name: 'Tickets', to: '/tickets', icon: Bars4Icon, current: false },
+  { name: 'Open Tickets', to: '/', icon: HomeIcon, current: true },
+  {
+    name: 'Closed Tickets',
+    to: '/tickets',
+    icon: Bars4Icon,
+    current: false,
+  },
 ]
 
 function classNames(...classes) {
@@ -45,6 +50,19 @@ export default function Home() {
       console.log(error)
     }
   }
+
+  const statusOrder = ['In Progress', 'Open']
+
+  const filteredTickets = user?.roles.includes('admin')
+    ? tickets?.filter((ticket) => ticket.status !== 'Closed')
+    : tickets?.filter(
+        (ticket) =>
+          ticket.status !== 'Closed' && ticket.username === user.username
+      )
+
+  const sortedTickets = filteredTickets?.sort((a, b) => {
+    return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+  })
 
   return ticketsLoading ? (
     <h1>Loading...</h1>
@@ -187,7 +205,7 @@ export default function Home() {
                     <Menu.Item>
                       <button
                         onClick={() => logoutUser()}
-                        className="bg-gray-100 text-gray-900 block px-4 py-2 text-sm"
+                        className="bg-gray-100 text-gray-900 block px-4 py-2 text-sm w-full text-left"
                       >
                         Logout
                       </button>
@@ -267,7 +285,7 @@ export default function Home() {
                         <Menu.Item>
                           <button
                             onClick={() => logoutUser()}
-                            className="bg-gray-100 text-gray-900 block px-4 py-2 text-sm"
+                            className="bg-gray-100 text-gray-900 block px-4 py-2 text-sm w-full text-left"
                           >
                             Logout
                           </button>
@@ -281,7 +299,7 @@ export default function Home() {
           </div>
           <main className="flex-1">
             {/* Page title & actions */}
-            <div className="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+            <div className="border-b border-gray-200 px-4 py-4 flex items-center justify-between sm:px-6 lg:px-8">
               <div className="min-w-0 flex-1">
                 <h1 className="text-lg font-medium leading-6 text-gray-900 sm:truncate">
                   Home
@@ -294,9 +312,9 @@ export default function Home() {
                 >
                   Create Ticket
                 </button>
-                {isOpen && <TicketModal setIsOpen={setIsOpen} />}
               </div>
             </div>
+            {isOpen && <TicketModal setIsOpen={setIsOpen} />}
 
             {/* Projects list (only on smallest breakpoint) */}
             <div className=" sm:hidden">
@@ -304,7 +322,7 @@ export default function Home() {
                 <h2 className="text-lg font-medium text-gray-900">Tickets</h2>
               </div>
               <ul className="mt-3 divide-y divide-gray-100 border-t border-gray-200">
-                {tickets.map((ticket) => (
+                {sortedTickets.map((ticket) => (
                   <li key={ticket._id}>
                     <Link
                       to="/"
@@ -359,7 +377,7 @@ export default function Home() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 bg-white">
-                    {tickets.map((ticket) => (
+                    {sortedTickets.map((ticket) => (
                       <tr key={ticket._id}>
                         <td className="w-full max-w-0 whitespace-nowrap px-6 py-3 text-sm font-medium text-gray-900">
                           <div className="flex items-center space-x-3 lg:pl-2">
@@ -372,7 +390,7 @@ export default function Home() {
                           </div>
                         </td>
                         <td className="px-6 py-3 text-sm font-medium text-gray-500">
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-2 whitespace-nowrap">
                             {ticket.status}
                           </div>
                         </td>
