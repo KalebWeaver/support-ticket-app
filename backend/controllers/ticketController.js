@@ -99,14 +99,15 @@ const updateTicket = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc    Create Message
+// @desc    send Message
 // @route   POST /api/tickets/:ticketId/message
 // @access  Private
-const createMessage = asyncHandler(async (req, res) => {
+const sendMessage = asyncHandler(async (req, res) => {
   try {
     const { ticketId } = req.params
-    const { username, body } = req.body
-    if (body.trim() === '') {
+    const { username, message } = req.body
+    console.log(req.body)
+    if (message === '') {
       throw new Error('Message must not be empty')
     }
 
@@ -117,7 +118,7 @@ const createMessage = asyncHandler(async (req, res) => {
       } else {
         ticket.messages.unshift({
           username,
-          body,
+          body: message,
           createdAt: new Date().toISOString(),
         })
         if (ticket.status === 'Open') {
@@ -137,5 +138,5 @@ module.exports = {
   getTicket,
   createTicket,
   updateTicket,
-  createMessage,
+  sendMessage,
 }

@@ -9,7 +9,7 @@ const colors = require('colors')
 const connectDB = require('./utils/db')
 const corsOptions = require('./utils/corsConfig')
 
-const { errorHandler, notFound } = require('./middleware/errorMiddleware')
+const { errorHandler } = require('./middleware/errorMiddleware')
 
 //Calling DB Connection
 connectDB()
@@ -27,7 +27,19 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/api/auth', require('./routes/authRoutes'))
 app.use('/api/tickets', require('./routes/ticketRoutes'))
 
-//Serve Frontend
+// Serve Frontend
+if (process.env.NODE_ENV === 'production') {
+  //Set build folder as static
+  app.use(express.static(path.join(__dirname, '../frontend/build')))
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'))
+  )
+} else {
+  app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Welcome to Kalebs Support Ticket App' })
+  })
+}
 
 //Middleware
 app.use(errorHandler)

@@ -18,6 +18,16 @@ export const postsApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Tickets'],
     }),
+    sendMessage: builder.mutation({
+      query({ ticketId, message, username }) {
+        return {
+          url: `tickets/${ticketId}/message`,
+          method: 'POST',
+          body: { username, message },
+        }
+      },
+      invalidatesTags: ['Tickets'],
+    }),
     updateTicket: builder.mutation({
       query(data) {
         const { id, status } = data
@@ -37,4 +47,5 @@ export const {
   useGetTicketQuery,
   useCreateTicketMutation,
   useUpdateTicketMutation,
+  useSendMessageMutation,
 } = postsApi

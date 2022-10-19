@@ -6,6 +6,8 @@ import { setCredentials } from '../../features/auth/authSlice'
 import { useLoginMutation } from '../../app/services/auth'
 import { toast } from 'react-toastify'
 
+import Loading from '../../components/main/Loading'
+
 export default function Login() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -41,14 +43,14 @@ export default function Login() {
     try {
       const userData = await login(values).unwrap()
       dispatch(setCredentials(userData))
-      navigate('/')
+      navigate('/open-tickets')
     } catch (error) {
       toast.error(error.data)
     }
   }
 
   const content = isLoading ? (
-    <h1>Loading...</h1>
+    <Loading />
   ) : (
     <>
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">

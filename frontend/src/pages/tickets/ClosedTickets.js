@@ -4,25 +4,29 @@ import { Link, useNavigate } from 'react-router-dom'
 import { logOut } from '../../features/auth/authSlice'
 import { useLogoutMutation } from '../../app/services/auth'
 import { useGetTicketsQuery } from '../../app/services/tickets'
+import Loading from '../../components/main/Loading'
 
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3CenterLeftIcon,
-  Bars4Icon,
-  HomeIcon,
   XMarkIcon,
+  EnvelopeIcon,
+  EnvelopeOpenIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronRightIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
-import TicketModal from '../../components/tickets/TicketModal'
-
 const navigation = [
-  { name: 'Open Tickets', to: '/', icon: HomeIcon, current: true },
+  {
+    name: 'Open Tickets',
+    to: '/open-tickets',
+    icon: EnvelopeOpenIcon,
+    current: false,
+  },
   {
     name: 'Closed Tickets',
-    to: '/tickets',
-    icon: Bars4Icon,
-    current: false,
+    to: '/closed-tickets',
+    icon: EnvelopeIcon,
+    current: true,
   },
 ]
 
@@ -30,10 +34,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Home() {
+export default function OpenTickets() {
   const { user } = useSelector((state) => state.auth)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -51,21 +54,15 @@ export default function Home() {
     }
   }
 
-  const statusOrder = ['In Progress', 'Open']
-
   const filteredTickets = user?.roles.includes('admin')
-    ? tickets?.filter((ticket) => ticket.status !== 'Closed')
+    ? tickets?.filter((ticket) => ticket.status === 'Closed')
     : tickets?.filter(
         (ticket) =>
-          ticket.status !== 'Closed' && ticket.username === user.username
+          ticket.status === 'Closed' && ticket.username === user.username
       )
 
-  const sortedTickets = filteredTickets?.sort((a, b) => {
-    return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
-  })
-
   return ticketsLoading ? (
-    <h1>Loading...</h1>
+    <Loading />
   ) : (
     <>
       <div className="min-h-full">
@@ -167,7 +164,7 @@ export default function Home() {
             {/* User account dropdown */}
             <Menu as="div" className="relative inline-block px-3 text-left">
               <div>
-                <Menu.Button className="group w-full rounded-md bg-gray-100 px-3.5 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <Menu.Button className="group mt-1 w-full rounded-md bg-gray-100 px-3.5 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                   <span className="flex w-full items-center justify-between">
                     <span className="flex min-w-0 items-center justify-between space-x-3">
                       <img
@@ -297,24 +294,15 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <main className="flex-1">
+          <main className="flex-1 mt-4">
             {/* Page title & actions */}
             <div className="border-b border-gray-200 px-4 py-4 flex items-center justify-between sm:px-6 lg:px-8">
               <div className="min-w-0 flex-1">
                 <h1 className="text-lg font-medium leading-6 text-gray-900 sm:truncate">
-                  Home
+                  Closed Tickets
                 </h1>
               </div>
-              <div className="mt-4 flex sm:mt-0 sm:ml-4">
-                <button
-                  onClick={() => setIsOpen(true)}
-                  className="order-0 inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 sm:order-1 sm:ml-3"
-                >
-                  Create Ticket
-                </button>
-              </div>
             </div>
-            {isOpen && <TicketModal setIsOpen={setIsOpen} />}
 
             {/* Projects list (only on smallest breakpoint) */}
             <div className=" sm:hidden">
@@ -322,7 +310,7 @@ export default function Home() {
                 <h2 className="text-lg font-medium text-gray-900">Tickets</h2>
               </div>
               <ul className="mt-3 divide-y divide-gray-100 border-t border-gray-200">
-                {sortedTickets.map((ticket) => (
+                {filteredTickets.map((ticket) => (
                   <li key={ticket._id}>
                     <Link
                       to="/"
@@ -377,7 +365,7 @@ export default function Home() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 bg-white">
-                    {sortedTickets.map((ticket) => (
+                    {filteredTickets.map((ticket) => (
                       <tr key={ticket._id}>
                         <td className="w-full max-w-0 whitespace-nowrap px-6 py-3 text-sm font-medium text-gray-900">
                           <div className="flex items-center space-x-3 lg:pl-2">

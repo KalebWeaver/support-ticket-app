@@ -11,7 +11,8 @@ I began with this project to tackle some new concepts. I had worked with Redux-T
 - RTK Query to handle Caching and automatic rehydration of data sent to and from backend server
 - Protected page routes to prevent un-authenticated users from viewing sensitive data. (This includes both users that are logged in and are not from viewing tickets)
 - Role based handling of data. (Admins can view all tickets from everyone, while users can only see their own). 
-- Basic messaging system to let users talk in depth about issues with admin.
+- Basic messaging system to let users talk in depth about issues with admin. 
+- Tickets automatically sort by Role/User then by priority. ('In Progress' > 'Open' > 'Closed')
 
 ## Packages 
 - React
