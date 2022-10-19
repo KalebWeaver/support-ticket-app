@@ -1,15 +1,13 @@
-import { useState } from 'react'
 import { useForm } from '../../utils/hooks'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '../../features/auth/authSlice'
 import { useRegisterMutation } from '../../app/services/auth'
+import { toast } from 'react-toastify'
 
 export default function Login() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const [err, setErr] = useState('')
 
   const [register, { isLoading }] = useRegisterMutation()
 
@@ -26,7 +24,7 @@ export default function Login() {
       dispatch(setCredentials(userData))
       navigate('/')
     } catch (error) {
-      setErr(error.data)
+      toast.error(error.data)
     }
   }
 

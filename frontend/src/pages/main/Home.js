@@ -33,7 +33,7 @@ export default function Home() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const [logout, { isLoading }] = useLogoutMutation()
+  const [logout] = useLogoutMutation()
   const { data: tickets, isLoading: ticketsLoading } = useGetTicketsQuery()
 
   async function logoutUser() {
