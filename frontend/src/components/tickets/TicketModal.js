@@ -10,9 +10,8 @@ export default function TicketModal({ setIsOpen }) {
   const { user } = useSelector((state) => state.auth)
 
   const [open, setOpen] = useState(true)
-  const [filterName, setFilterName] = useState('')
 
-  const [createTicket, { isLoading }] = useCreateTicketMutation()
+  const [createTicket] = useCreateTicketMutation()
 
   const { onChange, onSubmit, values } = useForm(submitTicket, {
     title: '',
@@ -26,7 +25,7 @@ export default function TicketModal({ setIsOpen }) {
   }
 
   function submitTicket() {
-    console.log(values)
+    createTicket(values)
     handleClose()
   }
 
@@ -96,7 +95,6 @@ export default function TicketModal({ setIsOpen }) {
                             value={values.description}
                             onChange={onChange}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm"
-                            defaultValue={''}
                           />
                         </div>
                       </div>
