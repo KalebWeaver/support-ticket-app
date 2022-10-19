@@ -20,7 +20,7 @@ const protect = asyncHandler(async (req, res, next) => {
       next()
     } catch (error) {
       console.log(error)
-      res.status(401)
+      res.status(403)
       if (process.env.NODE_ENV === 'production') {
         throw new Error('Not Authorized!')
       } else {
@@ -31,7 +31,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
   //throw error if there is no token
   if (!token) {
-    res.status(401)
+    res.status(403)
     if (process.env.NODE_ENV === 'production') {
       throw new Error('Not Authorized!')
     } else {

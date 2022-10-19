@@ -7,6 +7,7 @@ import PrivateRoute from './components/auth/PrivateRoute'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Home from './pages/main/Home'
+import MyTickets from './pages/tickets/MyTickets'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             {/*----Protected----*/}
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<Home />} />
+              <Route path="/tickets" element={<MyTickets />} />
             </Route>
           </Routes>
         </main>
