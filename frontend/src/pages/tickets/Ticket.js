@@ -7,6 +7,7 @@ import {
   useUpdateTicketMutation,
   useGetTicketQuery,
 } from '../../app/services/tickets'
+import { toast } from 'react-toastify'
 
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
@@ -23,7 +24,7 @@ import Loading from '../../components/main/Loading'
 const navigation = [
   {
     name: 'Open Tickets',
-    to: '/open-tickets',
+    to: '/',
     icon: EnvelopeOpenIcon,
     current: false,
   },
@@ -67,6 +68,11 @@ export default function OpenTickets() {
       status: 'Closed',
     })
     navigate('/open-tickets')
+  }
+
+  const closeTicket = () => {
+    toast.info('Ticket closed!')
+    onUpdate()
   }
 
   return isLoading ? (
@@ -302,21 +308,23 @@ export default function OpenTickets() {
               </div>
             </div>
           </div>
-          <main className="flex-1 mt-4">
+          <main className="flex-1">
             {/* Page title & actions */}
             <div className="border-b border-gray-200 px-4 py-4 flex items-center justify-end sm:px-6 lg:px-8">
-              <div className="mt-4 flex sm:mt-0 sm:ml-4">
-                <button
-                  onClick={() => onUpdate()}
-                  className="order-0 inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 sm:order-1 sm:ml-3"
-                >
-                  Close Ticket
-                </button>
-              </div>
+              {ticket.status !== 'Closed' && (
+                <div className="mt-4 flex sm:mt-0 sm:ml-4">
+                  <button
+                    onClick={() => closeTicket()}
+                    className="order-0 inline-flex items-center rounded-md border border-transparent bg-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 sm:order-1 sm:ml-3"
+                  >
+                    Close Ticket
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Page Content */}
-            <div className="mt-2 hidden sm:block">
+            <div className=" block">
               <TicketCard ticket={ticket} />
             </div>
           </main>

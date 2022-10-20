@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useCreateTicketMutation } from '../../app/services/tickets'
+import { toast } from 'react-toastify'
 
 import { useForm } from '../../utils/hooks'
 
@@ -27,6 +28,7 @@ export default function TicketModal({ setIsOpen }) {
   function submitTicket() {
     createTicket(values)
     handleClose()
+    toast.success('Ticket Created!')
   }
 
   return (

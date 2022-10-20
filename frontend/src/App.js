@@ -24,7 +24,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             {/*----Protected----*/}
             <Route element={<PrivateRoute />}>
-              <Route path="/open-tickets" element={<OpenTickets />} />
+              <Route path="/" element={<OpenTickets />} />
               <Route path="/closed-tickets" element={<ClosedTickets />} />
               <Route path="/tickets/:ticketId" element={<Ticket />} />
             </Route>

@@ -20,7 +20,7 @@ import Loading from '../../components/main/Loading'
 const navigation = [
   {
     name: 'Open Tickets',
-    to: '/open-tickets',
+    to: '/',
     icon: EnvelopeOpenIcon,
     current: true,
   },
@@ -331,12 +331,19 @@ export default function OpenTickets() {
                 {sortedTickets.map((ticket) => (
                   <li key={ticket._id}>
                     <Link
-                      to="/"
+                      to={`/tickets/${ticket._id}`}
                       className="group flex items-center justify-between px-4 py-4 bg-white hover:bg-gray-50 sm:px-6 border-y-2 border-gray-400 rounded-lg"
                     >
                       <span className="flex flex-col gap-1 text-left">
-                        <span className="text-md font-medium leading-6">
+                        <span className=" flex flex-row items-center text-md font-medium leading-6">
                           {ticket.title}
+                          {ticket.status === 'Open' ? (
+                            <span className="block ml-2 h-2 w-2 rounded-full bg-green-400 ring-2 ring-white" />
+                          ) : ticket.status === 'In Progress' ? (
+                            <span className="block ml-2 h-2 w-2 rounded-full bg-yellow-400 ring-2 ring-white" />
+                          ) : (
+                            <span className="block ml-2 h-2 w-2 rounded-full bg-red-400 ring-2 ring-white" />
+                          )}
                         </span>
                         <span className=" text-sm leading-6">
                           Created By: {ticket.username}
@@ -398,6 +405,11 @@ export default function OpenTickets() {
                         <td className="px-6 py-3 text-sm font-medium text-gray-500">
                           <div className="flex items-center space-x-2 whitespace-nowrap">
                             {ticket.status}
+                            {ticket.status === 'Open' ? (
+                              <span className="block ml-1 h-2 w-2 rounded-full bg-green-400 ring-2 ring-white" />
+                            ) : (
+                              <span className="block ml-1 h-2 w-2 rounded-full bg-yellow-400 ring-2 ring-white" />
+                            )}
                           </div>
                         </td>
                         <td className="hidden whitespace-nowrap px-6 py-3 text-right text-sm text-gray-500 md:table-cell">

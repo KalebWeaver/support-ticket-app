@@ -23,7 +23,7 @@ export default function Login() {
     try {
       const userData = await register(values).unwrap()
       dispatch(setCredentials(userData))
-      navigate('/open-tickets')
+      navigate('/')
     } catch (error) {
       toast.error(error.data)
     }
