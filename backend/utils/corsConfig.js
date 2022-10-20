@@ -1,4 +1,8 @@
-const allowedOrigins = ['http://localhost:3000', 'https://sta.ksweaver.com/']
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://sta.ksweaver.com/',
+  'sta.ksweaver.com',
+]
 
 const corsOptions = {
   origin: (origin, callback) => {
