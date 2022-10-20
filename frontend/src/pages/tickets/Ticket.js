@@ -67,7 +67,7 @@ export default function OpenTickets() {
       id: ticketId,
       status: 'Closed',
     })
-    navigate('/open-tickets')
+    navigate('/')
   }
 
   const closeTicket = () => {
