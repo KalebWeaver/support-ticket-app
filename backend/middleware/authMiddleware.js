@@ -19,7 +19,6 @@ const protect = asyncHandler(async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('-password')
       next()
     } catch (error) {
-      console.log(error)
       res.status(403)
       if (process.env.NODE_ENV === 'production') {
         throw new Error('Not Authorized!')

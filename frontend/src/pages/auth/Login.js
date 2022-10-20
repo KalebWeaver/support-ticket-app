@@ -129,12 +129,20 @@ export default function Login() {
               <div>
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md border border-transparent bg-cyan-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                  className="flex w-full justify-center rounded-md border border-transparent bg-cyan-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
                 >
                   Sign in
                 </button>
               </div>
             </form>
+            <div className="text-md mt-4">
+              If You wish to skip the registration process, you can use the
+              following credentials: <br />
+              <p className="text-sm ">User - (Username: user, Password: 123)</p>
+              <p className="text-sm">
+                Admin - (Username: admin, Password: 123)
+              </p>
+            </div>
           </div>
         </div>
       </div>

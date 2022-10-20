@@ -1,5 +1,5 @@
 import { useForm } from '../../utils/hooks'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '../../features/auth/authSlice'
 import { useRegisterMutation } from '../../app/services/auth'
@@ -38,6 +38,15 @@ export default function Login() {
           <h2 className="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
             Register a new user
           </h2>
+          <p className="mt-2 text-center text-lg text-gray-600">
+            Or{' '}
+            <Link
+              to="/login"
+              className="font-medium text-cyan-600 hover:text-cyan-500"
+            >
+              login with existing user
+            </Link>
+          </p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -118,12 +127,17 @@ export default function Login() {
               <div>
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md border border-transparent bg-cyan-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                  className="flex w-full justify-center rounded-md border border-transparent bg-cyan-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
                 >
                   Register
                 </button>
               </div>
             </form>
+            <div className="text-md mt-4">
+              Any data you enter here will be stored in a database on the
+              server. Dumby data is allowed but must follow field requirements
+              (IE - email must be an email).
+            </div>
           </div>
         </div>
       </div>
