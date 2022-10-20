@@ -325,7 +325,7 @@ export default function OpenTickets() {
 
             {/* Page Content */}
             <div className=" block">
-              <TicketCard ticket={ticket} />
+              <TicketCard />
             </div>
           </main>
         </div>

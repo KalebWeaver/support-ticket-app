@@ -1,9 +1,15 @@
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { useSendMessageMutation } from '../../app/services/tickets'
+import {
+  useSendMessageMutation,
+  useGetTicketQuery,
+} from '../../app/services/tickets'
 import { useForm } from '../../utils/hooks'
+import Loading from '../main/Loading'
 
-export default function TicketCard({ ticket }) {
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
+
+export default function TicketCard() {
   const { user } = useSelector((state) => state.auth)
   const { ticketId } = useParams()
 
@@ -13,6 +19,7 @@ export default function TicketCard({ ticket }) {
     username: user.username,
   })
 
+  const { data: ticket, isLoading } = useGetTicketQuery(ticketId)
   const [sendMessage] = useSendMessageMutation()
 
   function submitMessage() {
@@ -20,7 +27,9 @@ export default function TicketCard({ ticket }) {
     setValues({ ...values, message: '' })
   }
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <div className="divide-y divide-gray-200 rounded-lg bg-white shadow sm:mx-6">
       <div className="px-4 py-5 sm:px-6 flex flex-col gap-4">
         {/* Content goes here */}
@@ -78,14 +87,14 @@ export default function TicketCard({ ticket }) {
           </form>
         )}
         {/* Message List */}
-        <div className="mt-2 w-full">
-          <div className="min-w-0 flex-1">
+        <div className="mt-4 w-full">
+          <div className="min-w-0 flex flex-row justify-between">
             <h1 className="text-xl font-medium leading-6 text-gray-900 sm:truncate underline">
               Messages:
             </h1>
           </div>
 
-          <ul className="mt-4 flex flex-col border-2 border-gray-200 rounded-lg p-4 w-full shadow-md">
+          <ul className="mt-2 flex flex-col border-2 border-gray-200 rounded-lg p-4 w-full shadow-md">
             {ticket.messages.map((message) => (
               <li
                 key={message._id}
