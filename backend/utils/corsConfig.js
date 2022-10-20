@@ -2,6 +2,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://sta.ksweaver.com/',
   'sta.ksweaver.com',
+  'https://ksweaver.com',
+  'ksweaver.com',
 ]
 
 const corsOptions = {
